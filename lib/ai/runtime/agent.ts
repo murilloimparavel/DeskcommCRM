@@ -25,6 +25,7 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { generateText, stepCountIs, type LanguageModel, type StopCondition, type ToolSet } from "ai";
 
 // Fonte única do endpoint — a mesma constante que o registry de produção usa.
@@ -172,12 +173,13 @@ export function buildModel(provider: string, apiKey: string, modelId: string): L
     // `unsupported_provider` — enquanto a mensagem de verdade seria respondida
     // normalmente pelo worker. Erro no ensaio lê-se como produto quebrado.
     case "openrouter":
-      return createOpenAI({
+      return createOpenRouter({
         apiKey,
-        baseURL: OPENROUTER_ENDPOINT,
-        headers: {
-          "HTTP-Referer": "https://crm.murilloalves.com.br",
-          "X-Title": "DeskcommCRM",
+        extraBody: {
+          headers: {
+            "HTTP-Referer": "https://crm.murilloalves.com.br",
+            "X-Title": "DeskcommCRM",
+          },
         },
       })(modelId);
     default:

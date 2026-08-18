@@ -6,6 +6,7 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import type { LanguageModel } from 'ai';
 import { MockLanguageModelV3 } from 'ai/test';
 
@@ -78,16 +79,17 @@ export function createDefaultRegistry(opts?: { allowedHosts?: string[] }): Provi
      * tela ofereceu, com erro de rede que ninguém liga ao painel.
      */
     openrouter: (apiKey, modelId, baseUrl) => {
-      const endpoint = baseUrl ?? OPENROUTER_ENDPOINT;
-      return createOpenAI({
+      const openrouter = createOpenRouter({
         apiKey,
-        baseURL: endpoint,
-        headers: {
-          'HTTP-Referer': 'https://crm.murilloalves.com.br',
-          'X-Title': 'DeskcommCRM',
+        ...(baseUrl ? { baseURL: baseUrl } : {}),
+        extraBody: {
+          headers: {
+            'HTTP-Referer': 'https://crm.murilloalves.com.br',
+            'X-Title': 'DeskcommCRM',
+          },
         },
-        fetch: contain(endpoint),
-      })(modelId);
+      });
+      return openrouter(modelId);
     },
   };
 }
