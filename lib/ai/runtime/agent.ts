@@ -175,12 +175,8 @@ export function buildModel(provider: string, apiKey: string, modelId: string): L
     case "openrouter":
       return createOpenRouter({
         apiKey,
-        extraBody: {
-          headers: {
-            "HTTP-Referer": "https://crm.murilloalves.com.br",
-            "X-Title": "DeskcommCRM",
-          },
-        },
+        appName: "DeskcommCRM",
+        appUrl: "https://crm.murilloalves.com.br",
       })(modelId);
     default:
       throw new Error(`unsupported_provider: ${provider}`);

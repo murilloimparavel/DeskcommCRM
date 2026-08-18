@@ -82,12 +82,8 @@ export function createDefaultRegistry(opts?: { allowedHosts?: string[] }): Provi
       const openrouter = createOpenRouter({
         apiKey,
         ...(baseUrl ? { baseURL: baseUrl } : {}),
-        extraBody: {
-          headers: {
-            'HTTP-Referer': 'https://crm.murilloalves.com.br',
-            'X-Title': 'DeskcommCRM',
-          },
-        },
+        appName: 'DeskcommCRM',
+        appUrl: 'https://crm.murilloalves.com.br',
       });
       return openrouter(modelId);
     },
